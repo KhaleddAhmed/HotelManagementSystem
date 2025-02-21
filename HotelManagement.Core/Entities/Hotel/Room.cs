@@ -22,6 +22,6 @@ namespace HotelManagement.Core.Entities.Hotel
 
         public double Rate { get; set; }
 
-        public string ExtraPrivilege { get; set; }
+        public string? ExtraPrivilege { get; set; }
     }
 }

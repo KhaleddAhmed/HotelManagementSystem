@@ -1,17 +1,18 @@
-
+using System.Text;
 using HotelManagement.Core;
 using HotelManagement.Core.Entities.Identity;
+using HotelManagement.Core.Mapping;
 using HotelManagement.Core.Service.Contract;
 using HotelManagement.Repository;
 using HotelManagement.Repository.Data;
 using HotelManagement.Repository.Data.Contexts;
+using HotelManagement.Service.Services.RoomImplementation;
 using HotelManagement.Service.Services.Token;
 using HotelManagement.Service.Services.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace HotelManagementSystem.API
 {
@@ -33,31 +34,37 @@ namespace HotelManagementSystem.API
                 options.UseSqlServer(builder.Configuration.GetConnectionString("HotelConnection"));
             });
 
-            builder.Services.AddIdentity<AppUser, IdentityRole>()
-             .AddEntityFrameworkStores<HotelDbContext>();
+            builder
+                .Services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<HotelDbContext>();
 
-			builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddAuthentication(option =>
-            {
-                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-
-            }).AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+            builder.Services.AddScoped<IRoomService, RoomService>();
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
+            builder
+                .Services.AddAuthentication(option =>
                 {
-                    ValidateIssuer = true,
-                    ValidIssuer = builder.Configuration ["JWT:Issuer"],
-                    ValidateAudience = true,
-                    ValidAudience = builder.Configuration["JWT:Audience"],
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
-                };
-            });
+                    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters =
+                        new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                        {
+                            ValidateIssuer = true,
+                            ValidIssuer = builder.Configuration["JWT:Issuer"],
+                            ValidateAudience = true,
+                            ValidAudience = builder.Configuration["JWT:Audience"],
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(
+                                Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])
+                            ),
+                        };
+                });
 
             #endregion
 
@@ -93,11 +100,10 @@ namespace HotelManagementSystem.API
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
-
-            app.MapControllers(); 
+            app.MapControllers();
             #endregion
 
             app.Run();
