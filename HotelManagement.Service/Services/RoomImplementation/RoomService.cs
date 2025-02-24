@@ -57,25 +57,6 @@ namespace HotelManagement.Service.Services.RoomImplementation
                 return genericResponse;
             }
 
-            var listOfRoomViews = GetAllRoomViews();
-            if (!listOfRoomViews.Contains(room.RoomView))
-            {
-                genericResponse.StatusCode = StatusCodes.Status400BadRequest;
-                genericResponse.Message = "This is not valid room View";
-                genericResponse.Data = null;
-
-                return genericResponse;
-            }
-
-            var listOfRoomExtraPrivilege = GetAllExtraPrivilege();
-            if (!listOfRoomExtraPrivilege.Contains(room.ExtraPrivilege))
-            {
-                genericResponse.StatusCode = StatusCodes.Status400BadRequest;
-                genericResponse.Message = "This is not valid Extra Privilege";
-                genericResponse.Data = null;
-
-                return genericResponse;
-            }
             if (room.Price < 0)
             {
                 genericResponse.StatusCode = StatusCodes.Status400BadRequest;
@@ -149,18 +130,6 @@ namespace HotelManagement.Service.Services.RoomImplementation
                 "King",
             };
 
-            return list;
-        }
-
-        private List<string> GetAllRoomViews()
-        {
-            var list = new List<string>() { "Pool", "Sea" };
-            return list;
-        }
-
-        private List<string> GetAllExtraPrivilege()
-        {
-            var list = new List<string>() { "WiFi", "Gym" };
             return list;
         }
     }
