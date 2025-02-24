@@ -16,12 +16,10 @@ namespace HotelManagement.Core.Entities.Hotel
 
         public int NumberOfBeds { get; set; }
 
-        public string RoomView { get; set; }
+        public bool IsSea { get; set; }
 
         public int NumberOfReviewers { get; set; }
 
         public double Rate { get; set; }
-
-        public string? ExtraPrivilege { get; set; }
     }
 }

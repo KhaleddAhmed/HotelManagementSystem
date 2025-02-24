@@ -17,8 +17,6 @@ namespace HotelManagement.Core.Dtos.Room
 
         public int NumberOfBeds { get; set; }
 
-        public string RoomView { get; set; }
-
-        public string ExtraPrivilege { get; set; }
+        public bool IsSea { get; set; }
     }
 }
