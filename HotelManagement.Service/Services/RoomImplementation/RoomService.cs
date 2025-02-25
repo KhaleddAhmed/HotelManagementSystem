@@ -93,9 +93,34 @@ namespace HotelManagement.Service.Services.RoomImplementation
             return genericResponse;
         }
 
-        public Task<GenericResponse<bool>> DeleteRoomHardAsync(int id)
+        public async Task<GenericResponse<bool>> DeleteRoomHardAsync(int id)
         {
-            throw new NotImplementedException();
+            GenericResponse<bool> genericResponse = new GenericResponse<bool>();
+            var room = await _unitOfWork.Repository<Room, int>().GetAsync(id);
+            if (room == null)
+            {
+                genericResponse.StatusCode = StatusCodes.Status400BadRequest;
+                genericResponse.Message = "Invalid Room Id";
+                return genericResponse;
+            }
+
+            _unitOfWork.Repository<Room, int>().Delete(room);
+            var result = await _unitOfWork.CompleteAsync();
+
+            if (result > 0)
+            {
+                genericResponse.StatusCode = StatusCodes.Status200OK;
+                genericResponse.Message = "Room is deleted Successfully";
+                genericResponse.Data = true;
+
+                return genericResponse;
+            }
+
+            genericResponse.StatusCode = StatusCodes.Status500InternalServerError;
+            genericResponse.Message = "Failed to delete room";
+            genericResponse.Data = false;
+
+            return genericResponse;
         }
 
         public Task<GenericResponse<bool>> DeleteRoomSoftAsync(int id)
