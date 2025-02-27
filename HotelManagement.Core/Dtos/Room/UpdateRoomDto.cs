@@ -18,5 +18,9 @@ namespace HotelManagement.Core.Dtos.Room
         public int NumberOfBeds { get; set; }
 
         public bool IsSea { get; set; }
+
+        public int NumberOfReviewers { get; set; }
+
+        public double Rate { get; set; }
     }
 }

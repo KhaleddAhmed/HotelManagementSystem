@@ -138,9 +138,78 @@ namespace HotelManagement.Service.Services.RoomImplementation
             throw new NotImplementedException();
         }
 
-        public Task<GenericResponse<GetRoomDto>> UpdateRoomAsync(UpdateRoomDto room)
+        public async Task<GenericResponse<GetRoomDto>> UpdateRoomAsync(UpdateRoomDto Updateroom)
         {
-            throw new NotImplementedException();
+            var genericResponse = new GenericResponse<GetRoomDto>();
+
+            if (Updateroom is null)
+            {
+                genericResponse.StatusCode = StatusCodes.Status400BadRequest;
+                genericResponse.Message = "There are Invalid Inputs";
+
+                return genericResponse;
+            }
+
+            if (Updateroom.NumberOfBeds > 10)
+            {
+                genericResponse.StatusCode = StatusCodes.Status400BadRequest;
+                genericResponse.Message = "This is Invalid Number of Beds";
+                genericResponse.Data = null;
+
+                return genericResponse;
+            }
+
+            var listOfAllRoomTypes = GetAllRoomTypes();
+
+            if (!listOfAllRoomTypes.Contains(Updateroom.RoomType))
+            {
+                genericResponse.StatusCode = StatusCodes.Status400BadRequest;
+                genericResponse.Message = "This is not valid room type";
+                genericResponse.Data = null;
+
+                return genericResponse;
+            }
+
+            if (Updateroom.Price < 0)
+            {
+                genericResponse.StatusCode = StatusCodes.Status400BadRequest;
+                genericResponse.Message = "Invalid Price";
+                genericResponse.Data = null;
+
+                return genericResponse;
+            }
+            var room = await _unitOfWork.Repository<Room, int>().GetAsync(Updateroom.Id);
+            if (room == null)
+            {
+                genericResponse.StatusCode = StatusCodes.Status400BadRequest;
+                genericResponse.Message = "Invalid Room Id";
+
+                return genericResponse;
+            }
+
+            _mapper.Map(Updateroom, room);
+
+            room.ModifiedAt = DateTime.Now;
+
+            _unitOfWork.Repository<Room, int>().Update(room);
+
+            var result = await _unitOfWork.CompleteAsync();
+
+            if (result > 0)
+            {
+                var mappedRoom = _mapper.Map<GetRoomDto>(room);
+
+                genericResponse.StatusCode = StatusCodes.Status200OK;
+                genericResponse.Message = "Room Updated Succesfully";
+                genericResponse.Data = mappedRoom;
+
+                return genericResponse;
+            }
+
+            genericResponse.StatusCode = StatusCodes.Status200OK;
+            genericResponse.Message = "Failed to Update room";
+
+            return genericResponse;
         }
 
         private List<string> GetAllRoomTypes()
