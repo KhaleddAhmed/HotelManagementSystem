@@ -128,9 +128,36 @@ namespace HotelManagement.Service.Services.RoomImplementation
             throw new NotImplementedException();
         }
 
-        public Task<GenericResponse<AllRoomsDto>> GetAllRoomsAsync(int? pageSize, int? PageIndex)
+        public async Task<GenericResponse<GetAllRoomsDtoWithCount>> GetAllRoomsAsync(
+            int? pageSize,
+            int? PageIndex
+        )
         {
-            throw new NotImplementedException();
+            var GenericResponse = new GenericResponse<GetAllRoomsDtoWithCount>();
+            GetAllRoomsDtoWithCount getAllRoomsDtoWithCount = new GetAllRoomsDtoWithCount();
+
+            var rooms = await _unitOfWork.Repository<Room, int>().GetAllAsync();
+
+            if (rooms is not null)
+            {
+                var paginatedRooms = rooms.Skip(PageIndex.Value - 1).Take(pageSize.Value).ToList();
+                var mappedRooms = _mapper.Map<List<AllRoomsDto>>(paginatedRooms);
+                getAllRoomsDtoWithCount.Count = rooms.Count();
+                getAllRoomsDtoWithCount.AllRoomsDtos = mappedRooms;
+                getAllRoomsDtoWithCount.PageSize = pageSize.Value;
+                getAllRoomsDtoWithCount.PageIndex = PageIndex.Value;
+
+                GenericResponse.StatusCode = StatusCodes.Status200OK;
+                GenericResponse.Message = "All Rooms Retreived succesfully";
+                GenericResponse.Data = getAllRoomsDtoWithCount;
+
+                return GenericResponse;
+            }
+
+            GenericResponse.StatusCode = StatusCodes.Status200OK;
+            GenericResponse.Message = "No rooms to show";
+
+            return GenericResponse;
         }
 
         public Task<GenericResponse<GetRoomDto>> GetRoomByIdAsync(int id)

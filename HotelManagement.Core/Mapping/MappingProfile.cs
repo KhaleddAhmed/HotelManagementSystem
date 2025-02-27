@@ -16,6 +16,7 @@ namespace HotelManagement.Core.Mapping
             CreateMap<CreateRoomDto, Room>();
             CreateMap<Room, GetRoomDto>().ReverseMap();
             CreateMap<UpdateRoomDto, Room>().ReverseMap();
+            CreateMap<Room, AllRoomsDto>().ReverseMap();
         }
     }
 }
