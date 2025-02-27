@@ -15,7 +15,7 @@ namespace HotelManagementSystem.API.Controllers
             _roomService = roomService;
         }
 
-        [HttpPost]
+        [HttpPost("CreateRoom")]
         [Authorize(Roles = "Staff")]
         public async Task<ActionResult> CreateRoom([FromBody] CreateRoomDto roomDto)
         {
@@ -23,11 +23,19 @@ namespace HotelManagementSystem.API.Controllers
             return Ok(result);
         }
 
-        [HttpDelete]
+        [HttpDelete("DeleteRoom")]
         [Authorize(Roles = "Staff")]
         public async Task<ActionResult> DeleteRoom(int roomId)
         {
             var result = await _roomService.DeleteRoomHardAsync(roomId);
+            return Ok(result);
+        }
+
+        [HttpPut("UpdateRoom")]
+        [Authorize(Roles = "Staff")]
+        public async Task<ActionResult> UpdateRoom([FromBody] UpdateRoomDto roomDto)
+        {
+            var result = await _roomService.UpdateRoomAsync(roomDto);
             return Ok(result);
         }
     }
