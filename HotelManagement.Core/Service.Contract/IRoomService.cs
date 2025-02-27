@@ -10,7 +10,10 @@ namespace HotelManagement.Core.Service.Contract
 {
     public interface IRoomService
     {
-        Task<GenericResponse<AllRoomsDto>> GetAllRoomsAsync(int? pageSize, int? PageIndex);
+        Task<GenericResponse<GetAllRoomsDtoWithCount>> GetAllRoomsAsync(
+            int? pageSize,
+            int? PageIndex
+        );
 
         Task<GenericResponse<GetRoomDto>> GetRoomByIdAsync(int id);
 
