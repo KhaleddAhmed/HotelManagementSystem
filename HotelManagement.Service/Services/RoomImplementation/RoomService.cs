@@ -160,9 +160,24 @@ namespace HotelManagement.Service.Services.RoomImplementation
             return GenericResponse;
         }
 
-        public Task<GenericResponse<GetRoomDto>> GetRoomByIdAsync(int id)
+        public async Task<GenericResponse<GetRoomDto>> GetRoomByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var genericResponse = new GenericResponse<GetRoomDto>();
+            var room = await _unitOfWork.Repository<Room, int>().GetAsync(id);
+            if (room is not null)
+            {
+                var mappedRoom = _mapper.Map<GetRoomDto>(room);
+                genericResponse.StatusCode = StatusCodes.Status200OK;
+                genericResponse.Message = "Room details retrieved sucessfully";
+                genericResponse.Data = mappedRoom;
+
+                return genericResponse;
+            }
+
+            genericResponse.StatusCode = StatusCodes.Status400BadRequest;
+            genericResponse.Message = "Invalid room Id";
+
+            return genericResponse;
         }
 
         public async Task<GenericResponse<GetRoomDto>> UpdateRoomAsync(UpdateRoomDto Updateroom)
