@@ -40,9 +40,18 @@ namespace HotelManagementSystem.API.Controllers
         }
 
         [HttpGet("ViewAllRooms")]
+        [Authorize]
         public async Task<ActionResult> GetAllRooms(int? pageSize = 5, int? pageIndex = 1)
         {
             var result = await _roomService.GetAllRoomsAsync(pageSize, pageIndex);
+            return Ok(result);
+        }
+
+        [HttpGet("ViewRoomDetails")]
+        [Authorize]
+        public async Task<ActionResult> GetRoom(int roomId)
+        {
+            var result = await _roomService.GetRoomByIdAsync(roomId);
             return Ok(result);
         }
     }
