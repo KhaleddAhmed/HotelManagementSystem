@@ -16,7 +16,7 @@ namespace HotelManagementSystem.API.Controllers
             _reservationService = reservationService;
         }
 
-        [HttpPost("CreateReservation")]
+        [HttpPost("Reserve")]
         [Authorize(Roles = "User")]
         public async Task<ActionResult> CreateReservation(CreateReservationDto createReservationDto)
         {

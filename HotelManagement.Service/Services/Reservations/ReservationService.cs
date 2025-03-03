@@ -57,6 +57,14 @@ namespace HotelManagement.Service.Services.Reservations
                 return genericResponse;
             }
 
+            if (room.IsAvaliable == false)
+            {
+                genericResponse.StatusCode = StatusCodes.Status400BadRequest;
+                genericResponse.Message = "Room Is No Avaliable";
+
+                return genericResponse;
+            }
+
             if (createReservationDto.From.CompareTo(createReservationDto.To) > 0)
             {
                 genericResponse.StatusCode = StatusCodes.Status400BadRequest;
