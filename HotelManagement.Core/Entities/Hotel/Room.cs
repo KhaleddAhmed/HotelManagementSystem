@@ -21,5 +21,7 @@ namespace HotelManagement.Core.Entities.Hotel
         public int NumberOfReviewers { get; set; }
 
         public double Rate { get; set; }
+
+        public ICollection<Reservation> Reservations { get; set; }
     }
 }

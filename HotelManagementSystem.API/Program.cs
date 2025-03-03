@@ -6,6 +6,7 @@ using HotelManagement.Core.Service.Contract;
 using HotelManagement.Repository;
 using HotelManagement.Repository.Data;
 using HotelManagement.Repository.Data.Contexts;
+using HotelManagement.Service.Services.Reservations;
 using HotelManagement.Service.Services.RoomImplementation;
 using HotelManagement.Service.Services.Token;
 using HotelManagement.Service.Services.User;
@@ -42,6 +43,7 @@ namespace HotelManagementSystem.API
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IRoomService, RoomService>();
+            builder.Services.AddScoped<IReservationService, ReservationService>();
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder
                 .Services.AddAuthentication(option =>

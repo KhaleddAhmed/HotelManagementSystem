@@ -4,6 +4,7 @@ using HotelManagement.Repository.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManagement.Repository.Data.Migrations
 {
     [DbContext(typeof(HotelDbContext))]
-    partial class HotelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250302224530_GuestModule")]
+    partial class GuestModule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,10 +63,14 @@ namespace HotelManagement.Repository.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ApprovedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateOnly>("From")
                         .HasColumnType("date");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
@@ -73,9 +80,6 @@ namespace HotelManagement.Repository.Data.Migrations
 
                     b.Property<DateTime?>("ReservationModifiedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("ReservationStatus")
-                        .HasColumnType("int");
 
                     b.Property<DateOnly>("To")
                         .HasColumnType("date");
