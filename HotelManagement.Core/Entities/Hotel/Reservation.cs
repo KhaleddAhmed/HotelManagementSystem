@@ -41,5 +41,7 @@ namespace HotelManagement.Core.Entities.Hotel
         public DateTime? ReservationModifiedAt { get; set; }
 
         public PaymentMethod PaymentMethod { get; set; }
+
+        public bool IsDeleted { get; set; } = false;
     }
 }
