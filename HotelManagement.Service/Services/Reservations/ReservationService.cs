@@ -81,6 +81,17 @@ namespace HotelManagement.Service.Services.Reservations
 
                 return genericResponse;
             }
+
+            var allGuest = await _unitOfWork.Repository<Guest, int>().GetAllAsync();
+
+            var ContainThisUser = allGuest.Any(G => G.AppUserId == userId);
+            if (ContainThisUser)
+            {
+                genericResponse.StatusCode = StatusCodes.Status400BadRequest;
+                genericResponse.Message = "This user is already Guest It Cannot reserve again";
+
+                return genericResponse;
+            }
             var guest = new Guest { AppUserId = userId, LoyaltyPoints = 0 };
 
             await _unitOfWork.Repository<Guest, int>().AddAsync(guest);
@@ -103,6 +114,8 @@ namespace HotelManagement.Service.Services.Reservations
 
                 await _unitOfWork.Repository<Reservation, int>().AddAsync(Reservation);
 
+                room.IsAvaliable = false;
+
                 var resultReservation = await _unitOfWork.CompleteAsync();
 
                 if (resultReservation > 0)
@@ -123,9 +136,38 @@ namespace HotelManagement.Service.Services.Reservations
             return genericResponse;
         }
 
-        public Task<GenericResponse<bool>> DeleteReservationAsync(int reservationId)
+        public async Task<GenericResponse<bool>> DeleteReservationAsync(int reservationId)
         {
-            throw new NotImplementedException();
+            var genericResponse = new GenericResponse<bool>();
+            var reservation = await _unitOfWork
+                .Repository<Reservation, int>()
+                .GetAsync(reservationId);
+            if (reservation == null)
+            {
+                genericResponse.StatusCode = StatusCodes.Status400BadRequest;
+                genericResponse.Message = "Invalid Reservation to delete";
+
+                return genericResponse;
+            }
+
+            reservation.IsDeleted = true;
+
+            _unitOfWork.Repository<Reservation, int>().Update(reservation);
+            var result = await _unitOfWork.CompleteAsync();
+
+            if (result > 0)
+            {
+                genericResponse.StatusCode = StatusCodes.Status200OK;
+                genericResponse.Message = "Successfully delete reservation";
+                genericResponse.Data = true;
+
+                return genericResponse;
+            }
+
+            genericResponse.StatusCode = StatusCodes.Status200OK;
+            genericResponse.Message = "Failed to delete reservation";
+
+            return genericResponse;
         }
 
         public Task<GenericResponse<GetAllReservationsDto>> GetAllReservationsAsync(string? userId)

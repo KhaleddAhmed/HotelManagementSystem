@@ -8,6 +8,7 @@ namespace HotelManagement.Core.Dtos.Room
 {
     public class AllRoomsDto
     {
+        public int Id { get; set; }
         public string RoomType { get; set; }
         public decimal Price { get; set; }
         public int NumberOfBeds { get; set; }
