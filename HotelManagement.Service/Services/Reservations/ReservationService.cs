@@ -201,7 +201,7 @@ namespace HotelManagement.Service.Services.Reservations
             if (createReservationDto.From.CompareTo(createReservationDto.To) > 0)
             {
                 genericResponse.StatusCode = StatusCodes.Status400BadRequest;
-                genericResponse.Message = "Invalid Reservation to Update";
+                genericResponse.Message = "Invalid Duration to Create";
 
                 return genericResponse;
             }
