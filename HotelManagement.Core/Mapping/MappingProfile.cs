@@ -21,7 +21,20 @@ namespace HotelManagement.Core.Mapping
 
             CreateMap<Reservation, GetReservationDto>()
                 .ForMember(d => d.GuestName, o => o.MapFrom(s => s.Guest.AppUser.UserName))
-                .ForMember(d => d.TotalNumberOfDays, o => o.MapFrom(s => s.To.Day - s.From.Day));
+                // Calculate TotalNumberOfDays by considering the full duration between the From and To dates
+                .ForMember(
+                    d => d.TotalNumberOfDays,
+                    o =>
+                        o.MapFrom(s =>
+                            Math.Max(
+                                0,
+                                (
+                                    s.To.ToDateTime(new TimeOnly())
+                                    - s.From.ToDateTime(new TimeOnly())
+                                ).Days
+                            )
+                        )
+                );
         }
     }
 }
