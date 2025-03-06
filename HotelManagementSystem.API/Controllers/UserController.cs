@@ -29,5 +29,43 @@ namespace HotelManagementSystem.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpDelete("CancelReservation")]
+        [Authorize(Roles = "Guest")]
+        public async Task<ActionResult> CancelReservation(int reservationId)
+        {
+            var result = await _reservationService.DeleteReservationAsync(reservationId);
+            return Ok(result);
+        }
+
+        [HttpGet("GetAllMyReservations")]
+        [Authorize(Roles = "Guest")]
+        public async Task<ActionResult> GetAllReservtions()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await _reservationService.GetAllReservationsAsync(userId);
+            return Ok(result);
+        }
+
+        [HttpGet("GetReservationDetails")]
+        [Authorize(Roles = "Guest")]
+        public async Task<ActionResult> GetReservationDetails(int reservationId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var result = await _reservationService.GetReservationDetailsAsync(
+                reservationId,
+                userId
+            );
+            return Ok(result);
+        }
+
+        [HttpPut("UpdateReservation")]
+        [Authorize(Roles = "Guest")]
+        public async Task<ActionResult> UpdateReservation(UpdateReservationDto updateReservationDto)
+        {
+            var result = await _reservationService.UpdateReservationAsync(updateReservationDto);
+            return Ok(result);
+        }
     }
 }

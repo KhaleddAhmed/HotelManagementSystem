@@ -19,7 +19,7 @@ namespace HotelManagement.Core.Entities.Hotel
         Rejected = 3,
     }
 
-    public class Reservation
+    public class Reservation : BaseEntity
     {
         public int GuestID { get; set; }
         public Guest Guest { get; set; }
