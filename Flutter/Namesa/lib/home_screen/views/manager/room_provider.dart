@@ -10,14 +10,14 @@ class RoomProvider extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
-  String? _errorMessage;
+  String? _message;
 
-  String? get errorMessage => _errorMessage;
+  String? get message => _message;
 
   Future<void> createRoom(
       String roomType, double price, int numOfBeds, bool isSea) async {
     _isLoading = true;
-    _errorMessage = null;
+    _message = null;
     notifyListeners();
 
     var data = await apiService.createRoom(
@@ -26,16 +26,15 @@ class RoomProvider extends ChangeNotifier {
       numOfBeds: numOfBeds,
       isSea: isSea,
     );
+    // print(data);
     if (data.isNotEmpty) {
       _isLoading = false;
-      _errorMessage = null;
-
-      // print(data);
-
+      _message = data['message'];
+      // print(message);
       notifyListeners();
     } else {
       _isLoading = false;
-      _errorMessage = "Try Again Please";
+      _message = data['message'];
       notifyListeners();
     }
   }
@@ -43,7 +42,7 @@ class RoomProvider extends ChangeNotifier {
   Future<void> updateRoom(int roomId, String roomType, double price,
       int numOfBeds, bool isSea) async {
     _isLoading = true;
-    _errorMessage = null;
+    _message = null;
     notifyListeners();
 
     var data = await apiService.updateRoom(
@@ -55,34 +54,32 @@ class RoomProvider extends ChangeNotifier {
     );
     if (data.isNotEmpty) {
       _isLoading = false;
-      _errorMessage = null;
-
+      _message = data['message'];
       // print(data);
-
       notifyListeners();
     } else {
       _isLoading = false;
-      _errorMessage = "Try Again Please";
+      _message = data['message'];
       notifyListeners();
     }
   }
 
   Future<void> deleteRoom(int roomId) async {
     _isLoading = true;
-    _errorMessage = null;
+    _message = null;
     notifyListeners();
 
     var data = await apiService.deleteRoom(roomId = roomId);
     if (data.isNotEmpty) {
       _isLoading = false;
-      _errorMessage = null;
+      _message = data['message'];
 
       // print(data);
 
       notifyListeners();
     } else {
       _isLoading = false;
-      _errorMessage = "Try Again Please";
+      _message = data['message'];
       // print("failed");
       notifyListeners();
     }

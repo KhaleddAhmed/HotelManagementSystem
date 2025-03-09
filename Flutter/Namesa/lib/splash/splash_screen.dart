@@ -1,8 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-
-import '../login/views/screens/login_Screen.dart';
+import 'package:namesa/login_register/views/screens/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(
         const Duration(seconds: 3),
         () => Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const LoginScreen())));
+            MaterialPageRoute(builder: (_) => const LoginRegisterScreen())));
   }
 
   @override

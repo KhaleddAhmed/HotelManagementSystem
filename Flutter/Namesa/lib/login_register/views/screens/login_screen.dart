@@ -2,20 +2,20 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:namesa/core/api_services.dart';
-import 'package:namesa/home_screen/views/screens/home_screen.dart';
-import 'package:namesa/login/views/manager/login_provider.dart';
-import 'package:namesa/register/views/manager/register_provider.dart';
+import 'package:namesa/login_register/views/manager/login_provider.dart';
+import 'package:namesa/login_register/views/manager/register_provider.dart';
+import 'package:namesa/main_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginRegisterScreen extends StatefulWidget {
+  const LoginRegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LoginRegisterScreen> createState() => _LoginRegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginRegisterScreenState extends State<LoginRegisterScreen> {
   String? _isUser;
   String? _employeeRole;
   String? _gender;
@@ -111,8 +111,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 });
                                               },
                                               icon: !_show
-                                                  ? Icon(Icons.remove_red_eye)
-                                                  : Icon(Icons.close)),
+                                                  ? const Icon(
+                                                      Icons.remove_red_eye)
+                                                  : const Icon(Icons.close)),
                                           labelText: "Password",
                                           labelStyle: const TextStyle(
                                               color: Color(0xffBE7C01)),
@@ -129,13 +130,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                         onPressed: () async {
                                           await login.login(_emailCntr.text,
                                               _passwordCntr.text);
-
+                                          print("Login");
                                           login.errorMessage == null
                                               ? Navigator.of(context)
                                                   .pushReplacement(
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              const HomeScreen()))
+                                                              const MainScreen()))
                                               : null;
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -538,7 +539,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                                 .text.length >=
                                                             5) &&
                                                     (_isUser != null) &&
-                                                    (_employeeRole != null) &&
+                                                    (_employeeRole != null ||
+                                                        _isUser == "User") &&
                                                     (_gender != null)) {
                                                   setState(() {
                                                     _done = true;

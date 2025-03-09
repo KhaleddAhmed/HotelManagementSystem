@@ -22,25 +22,40 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
 
     var data = await apiService.login(username: username, password: password);
+    // print("data");
     if (data.isNotEmpty) {
       _isLoading = false;
       _errorMessage = null;
       // print(data["token"]);
-      MyCache.setString(key: "token", value: data["token"]);
-      final Map<String, dynamic> decodedToken =
-          JwtDecoder.decode(MyCache.getString(key: 'token'));
-      final Map<String, String> filteredToken = {
+      final decodedToken = JwtDecoder.decode(data['token']);
+      MyCache.setString(key: "token", value: data['token']);
+      // print(decodedToken);
+
+      final dynamic roles = decodedToken[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+      String mainRole = "N/A";
+      if (roles is List && roles.isNotEmpty) {
+        mainRole = roles.first;
+      } else {
+        mainRole = roles;
+      }
+
+      final Map<String, dynamic> filteredToken = {
         "email": decodedToken[
                 "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"] ??
             "N/A",
         "name": decodedToken[
                 "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"] ??
             "N/A",
-        "role": decodedToken[
-                "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ??
-            "N/A",
+        "role": mainRole,
       };
+
+      // print("filteredToken");
+      // print(filteredToken);
+
       MyCache.setString(key: "role", value: filteredToken["role"]!);
+      MyCache.setString(key: "name", value: filteredToken["name"]!);
 
       notifyListeners();
     } else {

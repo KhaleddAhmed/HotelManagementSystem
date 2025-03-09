@@ -6,6 +6,7 @@ import 'package:namesa/splash/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MyCache.initCache();
+  ErrorWidget.builder = (FlutterErrorDetails details) => Container();
   runApp(const MyApp());
 }
 
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
               fontFamily: "Poppins",
             ),
             debugShowCheckedModeBanner: false,
-            home: const SafeArea(child: SplashScreen()));
+            home: SafeArea(child: SplashScreen()));
       },
     );
   }

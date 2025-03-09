@@ -7,6 +7,7 @@ import 'package:namesa/core/cached_data.dart';
 class ApiService {
   final _baseUrl = 'https://10.0.2.2:7245/api/Account/';
   final _baseRoomUrl = 'https://10.0.2.2:7245/api/Room/';
+  final _baseReserveUrl = 'https://10.0.2.2:7245/api/User/';
 
   final Dio _dio;
 
@@ -75,6 +76,7 @@ class ApiService {
             "numberOfBeds": numOfBeds,
             "isSea": isSea
           });
+      // print(response.data!);
       return response.data;
     } catch (e) {
       // print(e);
@@ -111,7 +113,7 @@ class ApiService {
       return response.data;
     } catch (e) {
       // print(e);
-      print(e.toString());
+      // print(e.toString());
       return {};
     }
   }
@@ -126,6 +128,135 @@ class ApiService {
       // print(response.data);
       return response.data;
     } catch (e) {
+      // print(e.toString());
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> viewRoomDetails(int roomId) async {
+    try {
+      var response = await _dio.get('${_baseRoomUrl}ViewRoomDetails',
+          options: Options(headers: {
+            "Authorization": "Bearer ${MyCache.getString(key: "token")}"
+          }),
+          queryParameters: {"roomId": roomId});
+      // print(response.data);
+      return response.data;
+    } catch (e) {
+      // print(e.toString());
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> viewAllRooms(int pageSize, int pageIndex) async {
+    try {
+      var response = await _dio.get('${_baseRoomUrl}ViewAllRooms',
+          options: Options(headers: {
+            "Authorization": "Bearer ${MyCache.getString(key: "token")}"
+          }),
+          queryParameters: {"pageSize": pageSize, "pageIndex": pageIndex});
+      // print("From api service");
+      // print(response.data);
+      return response.data;
+    } catch (e) {
+      // print(e.toString());
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> reserveRoom(
+      int roomId, String checkIn, String checkOut, int paymentMethod) async {
+    try {
+      // print("From api service");
+      var response = await _dio.post('${_baseReserveUrl}Reserve',
+          options: Options(headers: {
+            "Authorization": "Bearer ${MyCache.getString(key: "token")}"
+          }),
+          data: {
+            "RoomId": roomId,
+            "From": checkIn,
+            "To": checkOut,
+            "PaymentMethod": paymentMethod
+          });
+      // print(response.data);
+      return response.data;
+    } catch (e) {
+      // print(e.toString());
+      // print(e.toString());
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> getReservations() async {
+    try {
+      var response = await _dio.get(
+        '${_baseReserveUrl}GetAllMyReservations',
+        options: Options(headers: {
+          "Authorization": "Bearer ${MyCache.getString(key: "token")}"
+        }),
+      );
+      // print("From api service");
+      // print(response.data);
+      return response.data;
+    } catch (e) {
+      // print(e.toString());
+      // print(e.toString());
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> getReservationDetails(int reservationId) async {
+    try {
+      var response = await _dio.get('${_baseReserveUrl}GetReservationDetails',
+          options: Options(headers: {
+            "Authorization": "Bearer ${MyCache.getString(key: "token")}"
+          }),
+          queryParameters: {"reservationId": reservationId});
+      // print("From api service");
+      // print(response.data);
+      return response.data;
+    } catch (e) {
+      // print(e.toString());
+      // print(e.toString());
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> cancelReservation(int reservationId) async {
+    try {
+      var response = await _dio.delete('${_baseReserveUrl}CancelReservation',
+          options: Options(headers: {
+            "Authorization": "Bearer ${MyCache.getString(key: "token")}"
+          }),
+          queryParameters: {"reservationId": reservationId});
+      // print("From api service");
+      // print(response.data);
+      return response.data;
+    } catch (e) {
+      // print(e.toString());
+      // print(e.toString());
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> updateReservation(int reservationId,
+      String checkIn, String checkOut, int paymentMethod) async {
+    try {
+      var response = await _dio.put('${_baseReserveUrl}UpdateReservation',
+          options: Options(headers: {
+            "Authorization": "Bearer ${MyCache.getString(key: "token")}"
+          }),
+          data: {
+            "ReservationId": reservationId,
+            "From": checkIn,
+            "To": checkOut,
+            "PaymentMethod": paymentMethod
+          });
+      // print("From api service");
+      // print(response.data);
+      return response.data;
+    } catch (e) {
+      // print(e.toString());
       // print(e.toString());
       return {};
     }
