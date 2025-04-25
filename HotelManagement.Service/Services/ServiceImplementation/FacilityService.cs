@@ -61,7 +61,7 @@ namespace HotelManagement.Service.Services.ServiceImplementation
 
                 if (result > 0)
                 {
-                    genericResponse.StatusCode = StatusCodes.Status400BadRequest;
+                    genericResponse.StatusCode = StatusCodes.Status200OK;
                     genericResponse.Message = "Sucess to Approve User service";
                     genericResponse.Data = true;
 
@@ -185,7 +185,7 @@ namespace HotelManagement.Service.Services.ServiceImplementation
             var genericResponse = new GenericResponse<List<UserServiceApprovementDto>>();
             var userServices = await _unitOfWork
                 .Repository<UserService, int>()
-                .Get()
+                .GetAllAsyncAsQueryable()
                 .Result.Include(Us => Us.Guest)
                 .ThenInclude(G => G.AppUser)
                 .Include(Us => Us.Service)
@@ -266,7 +266,7 @@ namespace HotelManagement.Service.Services.ServiceImplementation
 
                 if (result > 0)
                 {
-                    genericResponse.StatusCode = StatusCodes.Status400BadRequest;
+                    genericResponse.StatusCode = StatusCodes.Status200OK;
                     genericResponse.Message = "Sucess to Approve User service";
                     genericResponse.Data = true;
 
