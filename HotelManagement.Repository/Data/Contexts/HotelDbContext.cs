@@ -23,5 +23,7 @@ namespace HotelManagement.Repository.Data.Contexts
 
         public DbSet<Staff> Staff { get; set; }
         public DbSet<Room> Rooms { get; set; }
+        public DbSet<Service> Services { get; set; }
+        public DbSet<UserService> UserServices { get; set; }
     }
 }

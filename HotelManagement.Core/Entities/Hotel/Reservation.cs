@@ -42,6 +42,8 @@ namespace HotelManagement.Core.Entities.Hotel
 
         public PaymentMethod PaymentMethod { get; set; }
 
+        public bool IsPaid { get; set; }
+
         public bool IsDeleted { get; set; } = false;
     }
 }

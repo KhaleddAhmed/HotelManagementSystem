@@ -6,8 +6,10 @@ using HotelManagement.Core.Service.Contract;
 using HotelManagement.Repository;
 using HotelManagement.Repository.Data;
 using HotelManagement.Repository.Data.Contexts;
+using HotelManagement.Service.Services.Guests;
 using HotelManagement.Service.Services.Reservations;
 using HotelManagement.Service.Services.RoomImplementation;
+using HotelManagement.Service.Services.ServiceImplementation;
 using HotelManagement.Service.Services.Token;
 using HotelManagement.Service.Services.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -44,6 +46,9 @@ namespace HotelManagementSystem.API
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IRoomService, RoomService>();
             builder.Services.AddScoped<IReservationService, ReservationService>();
+            builder.Services.AddScoped<IGuestService, GuestService>();
+            builder.Services.AddScoped<IFacilitiesService, FacilityService>();
+
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder
                 .Services.AddAuthentication(option =>

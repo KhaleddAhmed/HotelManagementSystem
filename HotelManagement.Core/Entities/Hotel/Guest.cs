@@ -14,5 +14,7 @@ namespace HotelManagement.Core.Entities.Hotel
 
         public virtual ICollection<Reservation> Reservations { get; set; }
         public int LoyaltyPoints { get; set; }
+
+        public virtual ICollection<UserService> UserServices { get; set; }
     }
 }
