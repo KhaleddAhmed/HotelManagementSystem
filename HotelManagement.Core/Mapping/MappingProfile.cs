@@ -68,6 +68,10 @@ namespace HotelManagement.Core.Mapping
             CreateMap<UserService, UserServiceApprovementDto>()
                 .ForMember(d => d.GuestName, o => o.MapFrom(S => S.Guest.AppUser.UserName))
                 .ForMember(d => d.ServiceType, o => o.MapFrom(S => S.Service.ServiceType));
+
+            CreateMap<Core.Entities.Hotel.Service, GetAllAvailableServiceDto>();
+            CreateMap<UserService, GetAllRequestedServicesForUserDTO>()
+                .ForMember(d => d.ServiceType, o => o.MapFrom(s => s.Service.ServiceType));
         }
     }
 }
