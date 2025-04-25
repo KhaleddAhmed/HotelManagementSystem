@@ -13,7 +13,7 @@ namespace HotelManagement.Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Reservation> builder)
         {
-            builder.HasKey(R => new { R.RoomId, R.GuestID });
+            builder.HasKey(R => R.Id);
 
             builder
                 .HasOne(R => R.Guest)

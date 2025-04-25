@@ -4,6 +4,7 @@ using HotelManagement.Repository.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManagement.Repository.Data.Migrations
 {
     [DbContext(typeof(HotelDbContext))]
-    partial class HotelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250306113856_reservationEdit")]
+    partial class reservationEdit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,9 +75,6 @@ namespace HotelManagement.Repository.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedAt")
@@ -151,31 +151,6 @@ namespace HotelManagement.Repository.Data.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("HotelManagement.Core.Entities.Hotel.Service", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("ServiceFees")
-                        .HasColumnType("float");
-
-                    b.Property<int>("ServiceType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Services");
-                });
-
             modelBuilder.Entity("HotelManagement.Core.Entities.Hotel.Staff", b =>
                 {
                     b.Property<string>("AppUserId")
@@ -191,27 +166,6 @@ namespace HotelManagement.Repository.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Staff");
-                });
-
-            modelBuilder.Entity("HotelManagement.Core.Entities.Hotel.UserService", b =>
-                {
-                    b.Property<int>("GuestId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("RequestedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("GuestId", "ServiceId");
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("UserServices");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -477,25 +431,6 @@ namespace HotelManagement.Repository.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("HotelManagement.Core.Entities.Hotel.UserService", b =>
-                {
-                    b.HasOne("HotelManagement.Core.Entities.Hotel.Guest", "Guest")
-                        .WithMany("UserServices")
-                        .HasForeignKey("GuestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HotelManagement.Core.Entities.Hotel.Service", "Service")
-                        .WithMany("UserServices")
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Guest");
-
-                    b.Navigation("Service");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -550,18 +485,11 @@ namespace HotelManagement.Repository.Data.Migrations
             modelBuilder.Entity("HotelManagement.Core.Entities.Hotel.Guest", b =>
                 {
                     b.Navigation("Reservations");
-
-                    b.Navigation("UserServices");
                 });
 
             modelBuilder.Entity("HotelManagement.Core.Entities.Hotel.Room", b =>
                 {
                     b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("HotelManagement.Core.Entities.Hotel.Service", b =>
-                {
-                    b.Navigation("UserServices");
                 });
 
             modelBuilder.Entity("HotelManagement.Core.Entities.Identity.AppUser", b =>

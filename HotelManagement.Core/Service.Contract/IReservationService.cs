@@ -10,7 +10,7 @@ namespace HotelManagement.Core.Service.Contract
 {
     public interface IReservationService
     {
-        Task<GenericResponse<GetReservationDto>> CreateReservationAsync(
+        Task<GenericResponse<GetReservationDtoWithToken>> CreateReservationAsync(
             string userId,
             CreateReservationDto createReservationDto
         );
@@ -19,12 +19,13 @@ namespace HotelManagement.Core.Service.Contract
             UpdateReservationDto updateReservationDto
         );
 
-        Task<GenericResponse<GenericResponse<GetReservationDto>>> GetReservationDetailsAsync(
-            int reservationId
+        Task<GenericResponse<GetReservationDto>> GetReservationDetailsAsync(
+            int reservationId,
+            string userId
         );
 
         Task<GenericResponse<bool>> DeleteReservationAsync(int reservationId);
 
-        Task<GenericResponse<GetAllReservationsDto>> GetAllReservationsAsync(string? userId);
+        Task<GenericResponse<List<GetAllReservationsDto>>> GetAllReservationsAsync(string? userId);
     }
 }
