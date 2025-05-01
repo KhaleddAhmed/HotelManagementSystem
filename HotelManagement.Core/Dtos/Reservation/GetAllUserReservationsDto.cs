@@ -7,15 +7,14 @@ using HotelManagement.Core.Entities.Hotel;
 
 namespace HotelManagement.Core.Dtos.Reservation
 {
-    public class GetAllReservationsDto
+    public class GetAllUserReservationsDto
     {
-        public int ReservationId { get; set; }
+        public int Id { get; set; }
+        public string GuestName { get; set; }
 
         public DateOnly From { get; set; }
-        public DateOnly To { get; set; }
 
-        public PaymentMethod PaymentMethod { get; set; }
-        public decimal TotalPrice { get; set; }
+        public DateOnly To { get; set; }
         public ReservationStatus ReservationStatus { get; set; }
     }
 }
